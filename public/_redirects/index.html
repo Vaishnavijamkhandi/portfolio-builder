@@ -1,0 +1,27 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Portfolio Builder - Create stunning portfolios in minutes" />
+    <title>Portfolio Builder</title>
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <!-- Fallback for 404s -->
+    <script>
+      // Redirect to root if path doesn't exist (for SPA)
+      if (window.location.pathname !== '/' && !window.location.pathname.match(/\.(html|js|css|png|jpg|jpeg|gif|ico|json)$/)) {
+        if (!sessionStorage.getItem('redirected')) {
+          sessionStorage.setItem('redirected', 'true');
+          window.location.replace('/');
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>

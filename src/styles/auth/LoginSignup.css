@@ -1,0 +1,338 @@
+/* Global */
+body {
+  font-family: 'Poppins', system-ui, sans-serif;
+  background: radial-gradient(circle at top, #1a1a2e, #0f0f1a);
+  color: #ffffff;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+}
+
+/* Container */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  position: relative;
+}
+
+/* Card */
+.auth-card {
+  display: flex;
+  width: 100%;
+  max-width: 820px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+}
+
+/* LEFT PANEL */
+.auth-left {
+  flex: 1;
+  padding: 50px;
+  background: radial-gradient(
+      circle at top left,
+      rgba(255, 167, 38, 0.35),
+      transparent 60%
+    ),
+    linear-gradient(135deg, #1e1e1e, #121212);
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+/* Badge */
+.auth-left .badge {
+  display: inline-block;
+  background: rgba(255, 167, 38, 0.15);
+  color: #ffa726;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 14px;
+  width: fit-content;
+  margin-bottom: 20px;
+}
+
+/* Heading */
+.auth-left h1 {
+  font-size: 36px;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.auth-left h1 .highlight {
+  color: #ffa726;
+  font-weight: 800;
+}
+
+/* Subtitle */
+.auth-left .subtitle {
+  font-size: 16px;
+  color: #d0d0d0;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+/* Quote */
+.auth-left .quote {
+  font-style: italic;
+  color: #bdbdbd;
+  border-left: 3px solid #ffa726;
+  padding-left: 15px;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* RIGHT PANEL */
+.auth-right {
+  flex: 1;
+  padding: 50px;
+  position: relative;
+  z-index: 1;
+}
+
+.auth-right h2 {
+  font-size: 28px;
+  margin-bottom: 30px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Form */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  position: relative;
+}
+
+/* FIX FOR ICON FLOATING - Input Group */
+.input-group {
+  position: relative;
+  width: 100%;
+  margin-bottom: 15px;
+  height: 56px; /* Fixed height to prevent floating */
+}
+
+.input-group .icon {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ff9f43;
+  font-size: 18px;
+  z-index: 2;
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+/* Input styling */
+.input-group input {
+  width: 100%;
+  height: 100%;
+  padding: 16px 16px 16px 48px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+
+.input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+}
+
+.input-group input:focus {
+  outline: none;
+  border-color: #ff9f43;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 0 3px rgba(255, 159, 67, 0.2);
+}
+
+.input-group input:focus + .icon {
+  color: #ffcc80;
+  transform: translateY(-50%) scale(1.1);
+}
+
+.input-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Button */
+.auth-right button {
+  width: 100%;
+  padding: 16px;
+  border-radius: 12px;
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: #000;
+  cursor: pointer;
+  background: linear-gradient(90deg, #ff9f43, #ffb347);
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  position: relative;
+  min-height: 52px;
+}
+
+.auth-right button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(255, 159, 67, 0.5);
+}
+
+.auth-right button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.auth-right button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.auth-right button.loading {
+  background: linear-gradient(90deg, #ff9f43, #ffb347);
+  opacity: 0.8;
+}
+
+/* Spinner */
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error Message */
+.error-message {
+  color: #ff6b6b;
+  background: rgba(255, 107, 107, 0.1);
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-top: 5px;
+  border-left: 4px solid #ff6b6b;
+  text-align: center;
+}
+
+/* Toggle Auth */
+.toggle-auth {
+  margin-top: 24px;
+  color: #ff9f43;
+  cursor: pointer;
+  text-align: center;
+  font-size: 15px;
+  transition: color 0.3s ease;
+  padding: 8px;
+}
+
+.toggle-auth:hover {
+  color: #ffcc80;
+  text-decoration: underline;
+}
+
+.toggle-auth:active {
+  opacity: 0.8;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .auth-card {
+    flex-direction: column;
+    max-width: 90%;
+    margin: 20px;
+  }
+
+  .auth-left, .auth-right {
+    padding: 40px 30px;
+  }
+
+  .auth-left h1 {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .auth-left .subtitle {
+    font-size: 14px;
+    text-align: center;
+  }
+
+  .auth-left .quote {
+    text-align: center;
+    border-left: none;
+    padding-left: 0;
+    border-top: 2px solid #ffa726;
+    padding-top: 15px;
+  }
+
+  .auth-right h2 {
+    font-size: 24px;
+  }
+  
+  .input-group {
+    height: 52px; /* Slightly smaller on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-container {
+    padding: 10px;
+  }
+
+  .auth-left, .auth-right {
+    padding: 30px 20px;
+  }
+
+  .auth-left h1 {
+    font-size: 24px;
+  }
+
+  .auth-left .badge {
+    align-self: center;
+  }
+
+  .input-group input {
+    padding: 14px 14px 14px 44px;
+    font-size: 15px;
+  }
+
+  .input-group .icon {
+    font-size: 16px;
+    left: 14px;
+  }
+  
+  .input-group {
+    height: 50px;
+  }
+}
+
+/* Debug border - Remove after testing */
+/* .input-group {
+  border: 1px solid red;
+} */
