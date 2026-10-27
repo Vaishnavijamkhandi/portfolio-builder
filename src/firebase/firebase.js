@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, setPersistence, browserLocalPersistence } from "firebase/auth";
+import { getAuth, setPersistence, browserLocalPersistence, inMemoryPersistence } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyBN4SkzhwwcOggw0ODDt-cyiH4_L9b7c08",
@@ -14,13 +14,31 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-// Set persistence
-setPersistence(auth, browserLocalPersistence)
-  .then(() => {
-    console.log("Firebase auth persistence set to local");
-  })
-  .catch((error) => {
-    console.error("Error setting auth persistence:", error);
-  });
+// Force persistence with retry logic
+const setupPersistence = async () => {
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+    console.log("✅ Firebase auth persistence set to LOCAL");
+    
+    // Check if persistence is actually working
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      console.log("✅ User persisted from storage:", currentUser.email);
+    }
+  } catch (error) {
+    console.error("❌ Failed to set persistence:", error);
+    
+    // Fallback to session persistence
+    try {
+      await setPersistence(auth, browserLocalPersistence);
+      console.log("✅ Fallback: Set to SESSION persistence");
+    } catch (fallbackError) {
+      console.error("❌ Even fallback failed:", fallbackError);
+    }
+  }
+};
+
+// Run persistence setup
+setupPersistence();
 
 export { auth, app };

@@ -1,3 +1,6 @@
+
+
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../common/Header';
@@ -11,6 +14,7 @@ import {
 } from 'react-icons/fa';
 import './dashboard.css';
 import './deployment.css';
+import { auth } from '../../firebase/firebase';
 
 const DeploymentsDashboard = () => {
   const navigate = useNavigate();
@@ -18,12 +22,78 @@ const DeploymentsDashboard = () => {
   const [portfolios, setPortfolios] = useState([]);
   const [loading, setLoading] = useState(true);
   const [timeFilter, setTimeFilter] = useState('week');
+  const [authChecked, setAuthChecked] = useState(false);
 
-  useEffect(() => {
-    loadData();
+   useEffect(() => {
+    checkAuthAndLoadData();
+    
+    // Fallback timeout
+    const fallbackTimeout = setTimeout(() => {
+      if (!authChecked && !auth.currentUser) {
+        console.log("⏰ Fallback timeout - redirecting");
+        navigate('/', { replace: true });
+      }
+    }, 5000);
+    
+    return () => clearTimeout(fallbackTimeout);
   }, []);
 
- const loadData = () => {
+  const checkAuthAndLoadData = async () => {
+    console.log("🔐 Starting auth check for Downloads page");
+    
+    try {
+      // Method 1: Wait for auth state to be ready
+      await auth.authStateReady();
+      
+      const user = auth.currentUser;
+      console.log("🔐 Auth state ready:", user?.email);
+      
+      if (user) {
+        console.log("✅ User authenticated, proceeding");
+        setAuthChecked(true);
+        loadData();
+      } else {
+        console.log("❌ No authenticated user found");
+        navigate('/', { replace: true });
+      }
+    } catch (error) {
+      console.error("❌ Auth check failed:", error);
+      
+      // Fallback: Check every 100ms for 3 seconds
+      let attempts = 0;
+      const maxAttempts = 30;
+      
+      const interval = setInterval(() => {
+        attempts++;
+        const user = auth.currentUser;
+        
+        if (user) {
+          console.log(`✅ User found on attempt ${attempts}: ${user.email}`);
+          clearInterval(interval);
+          setAuthChecked(true);
+          loadData();
+          return;
+        }
+        
+        if (attempts >= maxAttempts) {
+          console.log("❌ Max attempts reached, redirecting");
+          clearInterval(interval);
+          navigate('/', { replace: true });
+        }
+      }, 100);
+    }
+  };
+
+  const loadData = () => {
+  // Check auth again before loading data
+  if (!auth.currentUser) {
+    console.log("❌ loadData: No user, redirecting");
+    navigate('/');
+    return;
+  }
+  
+  console.log("📊 Loading data for:", auth.currentUser.email);
+  
   // Load download history
   const downloadsData = localStorage.getItem('portfolio_downloads');
   if (downloadsData) {
@@ -286,7 +356,7 @@ const getTemplateName = (templateId) => {
     return mostUsed ? getTemplateName(mostUsed[0]) : 'None';
   };
 
-  if (loading) {
+      if (loading || !authChecked) {
     return (
       <>
         <Header />
@@ -294,7 +364,7 @@ const getTemplateName = (templateId) => {
           <div className="spinner">
             <FaRocket />
           </div>
-          <p>Loading portfolio data...</p>
+          <p>{!authChecked ? "Checking authentication..." : "Loading portfolio data..."}</p>
         </div>
       </>
     );

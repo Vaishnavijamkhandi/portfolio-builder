@@ -1,12 +1,12 @@
-// src/index.js
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';  // Make sure App.js is in src folder
+import App from './App';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+// TEMPORARY: Remove StrictMode to test
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>  {/* COMMENT OUT */}
     <App />
-  </React.StrictMode>
+  // </React.StrictMode> {/* COMMENT OUT */}
 );

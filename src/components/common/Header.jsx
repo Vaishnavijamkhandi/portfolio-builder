@@ -1,18 +1,27 @@
-// src/components/common/Header.jsx (Updated)
+// src/components/common/Header.jsx (FIXED VERSION)
 import React from "react";
+import { useNavigate } from "react-router-dom"; // ADD THIS
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase/firebase";
 import { FaRocket, FaSignOutAlt } from "react-icons/fa";
 import "./Header.css";
 
 const Header = () => {
+  const navigate = useNavigate(); // ADD THIS
+
   const handleLogout = async () => {
-    await signOut(auth);
-    window.location.href = "/"; // redirect to landing
+    try {
+      await signOut(auth);
+      console.log("✅ Logged out successfully");
+      navigate("/", { replace: true }); // CHANGED: use navigate
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   };
 
   const handleDeployments = () => {
-    window.location.href = "/deployments"; // navigate to deployments page
+    console.log("📥 Navigating to deployments");
+    navigate("/deployments"); // CHANGED: use navigate
   };
 
   return (

@@ -1,9 +1,11 @@
 // src/components/dashboard/ExampleDashboard.jsx
 import React from "react";
+import { useNavigate } from "react-router-dom"; // ADD THIS
 import PortfolioCard from "./PortfolioCard";
 import Header from "../common/Header";
 import "./dashboard.css";
 import AIFloatingChat from "../ai/AIFloatingChat"; 
+
 const templates = [
   {
     id: 1,
@@ -50,7 +52,6 @@ const templates = [
     color: "#FFD166",
     tags: ["SEO", "Social Media", "Analytics", "Campaigns"]
   },
-  // ADD TEMPLATE 6
   {
     id: 6,
     title: "Music Artist",
@@ -63,19 +64,29 @@ const templates = [
 ];
 
 const ExampleDashboard = () => {
-  // Update the handlePreview function
+  const navigate = useNavigate(); // ADD THIS
+  
+ // In ExampleDashboard.jsx - UPDATE THIS:
 const handlePreview = (templateId) => {
+  console.log("👁️ Preview clicked for template:", templateId);
+  
+  // Save which template we're previewing
+  localStorage.setItem('currentPreviewTemplate', templateId.toString());
+  
+  const baseUrl = window.location.origin; 
+  
+  // Open in new tab
   if (templateId === 7) {
-    window.open('/preview7', '_blank');
+    window.open('/preview7', '_blank', 'noopener,noreferrer');
   } else {
-    window.open(`/preview/${templateId}`, '_blank');
+    window.open(`/preview/${templateId}`, '_blank', 'noopener,noreferrer');
   }
 };
   const handleDemo = (templateId) => {
     localStorage.setItem('selectedTemplate', JSON.stringify(
       templates.find(t => t.id === templateId)
     ));
-    window.location.href = `/builder/${templateId}`;
+    navigate(`/builder/${templateId}`); // CHANGED: use navigate instead of window.location.href
   };
 
   return (
@@ -107,7 +118,9 @@ const handlePreview = (templateId) => {
             </div>
           ))}
         </div>
-	<AIFloatingChat />
+        
+        <AIFloatingChat />
+        
         {/* Steps Section */}
         <div className="dashboard-info">
           <h3>How it works:</h3>
